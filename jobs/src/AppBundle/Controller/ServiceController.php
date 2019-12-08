@@ -35,7 +35,7 @@ class ServiceController extends AbstractController
      */
     public function getAction($id): View
     {
-        return parent::getAction($entity);
+        return parent::getAction($id);
     }
 
     /**
