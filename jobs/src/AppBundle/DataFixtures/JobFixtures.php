@@ -4,10 +4,11 @@ namespace AppBundle\DataFixtures;
 
 use AppBundle\Entity\Job;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use DateTime;
 
-class JobFixtures extends Fixture
+class JobFixtures extends Fixture implements DependentFixtureInterface
 {
     /**
      * Load data fixtures with the passed EntityManager
@@ -25,5 +26,13 @@ class JobFixtures extends Fixture
         );
         $manager->persist($job);
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            ServiceFixtures::class,
+            ZipcodeFixtures::class
+        ];
     }
 }
