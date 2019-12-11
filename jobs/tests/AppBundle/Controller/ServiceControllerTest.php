@@ -15,7 +15,7 @@ class ServiceControllerTest extends AbstractControllerTest
         $this->loadServiceFixtures();
     }
 
-    public function testGetAllServices()
+    public function testGetAllServices(): void
     {
         $expected = file_get_contents('tests/Fixtures/services.json');
 
@@ -25,7 +25,7 @@ class ServiceControllerTest extends AbstractControllerTest
         $this->assertEquals($expected, $this->client->getResponse()->getContent());
     }
 
-    public function testGetOneServiceFound()
+    public function testGetOneServiceFound(): void
     {
         $expected = '{"id":411070,"name":"Fensterreinigung"}';
 
@@ -35,14 +35,14 @@ class ServiceControllerTest extends AbstractControllerTest
         $this->assertEquals($expected, $this->client->getResponse()->getContent());
     }
 
-    public function testGetOneServiceNotFound()
+    public function testGetOneServiceNotFound(): void
     {
         $this->client->request('GET', '/service/1');
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostServiceRepeatedReturnsBadRequest()
+    public function testPostServiceRepeatedReturnsBadRequest(): void
     {
         $this->client->request(
             'POST',
@@ -56,7 +56,7 @@ class ServiceControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostInvalidServiceReturnsBadRequest()
+    public function testPostInvalidServiceReturnsBadRequest(): void
     {
         $this->client->request(
             'POST',
@@ -70,7 +70,7 @@ class ServiceControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostValidServiceReturnsCreated()
+    public function testPostValidServiceReturnsCreated(): void
     {
         $this->client->request(
             'POST',

@@ -15,7 +15,7 @@ class ZipcodeControllerTest extends AbstractControllerTest
         $this->loadZipcodeFixtures();
     }
 
-    public function testGetAllZipcodes()
+    public function testGetAllZipcodes(): void
     {
         $expected = file_get_contents('tests/Fixtures/zipcodes.json');
 
@@ -25,7 +25,7 @@ class ZipcodeControllerTest extends AbstractControllerTest
         $this->assertEquals($expected, $this->client->getResponse()->getContent());
     }
 
-    public function testGetOneZipcodeFound()
+    public function testGetOneZipcodeFound(): void
     {
         $expected = '{"id":"01623","city":"Lommatzsch"}';
 
@@ -35,14 +35,14 @@ class ZipcodeControllerTest extends AbstractControllerTest
         $this->assertEquals($expected, $this->client->getResponse()->getContent());
     }
 
-    public function testGetOneZipcodeNotFound()
+    public function testGetOneZipcodeNotFound(): void
     {
         $this->client->request('GET', '/zipcode/1');
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostZipcodeRepeatedReturnsBadRequest()
+    public function testPostZipcodeRepeatedReturnsBadRequest(): void
     {
         $this->client->request(
             'POST',
@@ -56,7 +56,7 @@ class ZipcodeControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostInvalidZipcodeReturnsBadRequest()
+    public function testPostInvalidZipcodeReturnsBadRequest(): void
     {
         $this->client->request(
             'POST',
@@ -70,7 +70,7 @@ class ZipcodeControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostValidZipcodeReturnsCreated()
+    public function testPostValidZipcodeReturnsCreated(): void
     {
         $this->client->request(
             'POST',

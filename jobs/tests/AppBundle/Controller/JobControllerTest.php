@@ -29,24 +29,35 @@ class JobControllerTest extends AbstractControllerTest
         ];
     }
 
-    public function testGetAllJobs()
+    public function testGetAllJobs(): void
     {
         $this->client->request('GET', '/job');
 
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testGetOneJobFound()
+    public function testGetOneJobFound(): void
     {
+        $expected = '{"id":"a961c741-1c32-11ea-bfc6-0242ac130003","service_id":804040,"zipcode_id":"10115","title":"title","description":"decription","date_to_be_done":"2018-11-11T00:00:00+00:00"}';
 
+        $this->client->request('GET', '/job/a961c741-1c32-11ea-bfc6-0242ac130003');
+
+        $actualResponse = json_decode($this->client->getResponse()->getContent(), true);
+        unset($actualResponse['created_at']);
+        $actualResponse = json_encode($actualResponse);
+
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals($expected, $actualResponse);
     }
 
-    public function testGetOneJobNotFound()
+    public function testGetOneJobNotFound(): void
     {
+        $this->client->request('GET', '/job/1');
 
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostInvalidJobReturnsBadRequest()
+    public function testPostInvalidJobReturnsBadRequest(): void
     {
         $this->defaultJob['title'] = '';
 
@@ -62,7 +73,7 @@ class JobControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostJobWithServiceNotFoundReturnsBadRequest()
+    public function testPostJobWithServiceNotFoundReturnsBadRequest(): void
     {
         $this->defaultJob['serviceId'] = 12345;
 
@@ -78,7 +89,7 @@ class JobControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostJobWithZipcodeNotFoundReturnsBadRequest()
+    public function testPostJobWithZipcodeNotFoundReturnsBadRequest(): void
     {
         $this->defaultJob['zipcodeId'] = '12345';
 
@@ -94,7 +105,7 @@ class JobControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPostValidJobNewJobIsCreated()
+    public function testPostValidJobNewJobIsCreated(): void
     {
         $this->client->request(
             'POST',
@@ -108,7 +119,7 @@ class JobControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPutWithNotFoundJobReturnsNotFound()
+    public function testPutWithNotFoundJobReturnsNotFound(): void
     {
         $this->client->request(
             'PUT',
@@ -122,7 +133,7 @@ class JobControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPutWithValidJobReturnsNotFound()
+    public function testPutWithValidJobReturnsNotFound(): void
     {
         $id = $this->getFirstJobId();
         $this->client->request(
@@ -137,10 +148,7 @@ class JobControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @return String
-     */
-    private function getFirstJobId()
+    private function getFirstJobId(): string
     {
         $this->client->request('GET', '/job');
         $allJobs = json_decode($this->client->getResponse()->getContent(), true);
