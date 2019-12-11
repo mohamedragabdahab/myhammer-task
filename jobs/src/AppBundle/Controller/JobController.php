@@ -6,7 +6,6 @@ use AppBundle\Builder\Job as JobBuilder;
 use AppBundle\Services\Job;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
@@ -21,21 +20,17 @@ class JobController extends AbstractController
     /**
      * @Rest\Get("/job")
      *
-     * @param Request $request
      * @return View
      */
-    public function getAllFilteringAction(Request $request): View
+    public function getAllAction(): View
     {
-        return new View(
-            $this->container->get($this->serviceName)->findAll($request->query->all()),
-            Response::HTTP_OK
-        );
+        return parent::getAllAction();
     }
 
     /**
      * @Rest\Get("/job/{id}")
      *
-     * @param id
+     * @param string id
      * @throws NotFoundHttpException
      * @return View
      */
@@ -55,20 +50,12 @@ class JobController extends AbstractController
     /**
      * @Rest\Put("/job/{id}")
      *
-     * @param id
+     * @param string id
      * @param Request $request
      * @return View
      */
-    public function putAction(String $id, Request $request): View
+    public function putAction(string $id, Request $request): View
     {
-        $params = $request->request->all();
-        $params['id'] = $id;
-        $entity = $this->builder::build($params);
-        $persistedEntity = $this->container->get($this->serviceName)->update($entity);
-
-        return new View(
-            $persistedEntity,
-            Response::HTTP_OK
-        );
+        return parent::putAction($id, $request);
     }
 }

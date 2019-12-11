@@ -11,12 +11,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 abstract class AbstractController extends FOSRestController
 {
     /**
-     * @var String
+     * @var string
      */
     protected $serviceName;
 
     /**
-     * @var String
+     * @var string
      */
     protected $builder;
 
@@ -64,6 +64,19 @@ abstract class AbstractController extends FOSRestController
         return new View(
             $persistedEntity,
             Response::HTTP_CREATED
+        );
+    }
+
+    public function putAction(string $id, Request $request): View
+    {
+        $params = $request->request->all();
+        $params['id'] = $id;
+        $entity = $this->builder::build($params);
+        $persistedEntity = $this->container->get($this->serviceName)->update($entity);
+
+        return new View(
+            $persistedEntity,
+            Response::HTTP_OK
         );
     }
 }
