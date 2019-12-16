@@ -25,7 +25,8 @@ class JobControllerTest extends AbstractControllerTest
             'zipcodeId' => '10115',
             'title' => 'title',
             'description' => 'decription',
-            'dateToBeDone' => '2018-11-11'
+            'dateToBeDone' => '2018-11-11',
+            'id' => 'a961c741-1c32-11ea-bfc6-0242ac130003'
         ];
     }
 

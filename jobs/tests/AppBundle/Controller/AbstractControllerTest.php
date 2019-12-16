@@ -2,14 +2,14 @@
 
 namespace Tests\AppBundle\Controller;
 
-use AppBundle\DataFixtures\JobFixtures;
-use AppBundle\DataFixtures\ServiceFixtures;
-use AppBundle\DataFixtures\ZipcodeFixtures;
+use App\DataFixtures\JobFixtures;
+use App\DataFixtures\ServiceFixtures;
+use App\DataFixtures\ZipcodeFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class AbstractControllerTest extends WebTestCase
@@ -20,14 +20,15 @@ abstract class AbstractControllerTest extends WebTestCase
     protected $entityManager;
 
     /**
-     * @var Client
+     * @var KernelBrowser
      */
     protected $client;
 
     public function setUp()
     {
-        $kernel = self::bootKernel();
-        $this->entityManager = $kernel->getContainer()
+        $this->client = self::createClient();
+
+        $this->entityManager = $this->client->getContainer()
             ->get('doctrine')
             ->getManager();
 
@@ -36,7 +37,6 @@ abstract class AbstractControllerTest extends WebTestCase
 
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
-        $this->client = self::createClient();
     }
 
     protected function loadServiceFixtures()

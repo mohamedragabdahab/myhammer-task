@@ -2,9 +2,9 @@
 
 namespace Tests\AppBundle\Services;
 
-use AppBundle\Entity\Zipcode as ZipcodeEntity;
-use AppBundle\Repository\ZipcodeRepository;
-use AppBundle\Services\Zipcode;
+use App\Entity\Zipcode as ZipcodeEntity;
+use App\Repository\ZipcodeRepository;
+use App\Service\Zipcode;
 
 /**
  * @group unit
@@ -40,7 +40,7 @@ class ZipcodeTest extends AbstractServicesTest
             ->will($this->returnValue($this->defaultZipcodeEntity))
             ->with('01623');
 
-        $zipcode = new Zipcode($this->zipcodeRepository, $this->entityManager);
+        $zipcode = new Zipcode($this->entityManager, $this->zipcodeRepository);
         $this->assertEquals($this->defaultZipcodeEntity, $zipcode->find('01623'));
     }
 
@@ -60,7 +60,7 @@ class ZipcodeTest extends AbstractServicesTest
             ->expects($this->never())
             ->method('flush');
 
-        $zipcode = new Zipcode($this->zipcodeRepository, $this->entityManager);
+        $zipcode = new Zipcode($this->entityManager, $this->zipcodeRepository);
         $zipcode->create(new ZipcodeEntity('12345', 'ab'));
     }
 
@@ -80,7 +80,7 @@ class ZipcodeTest extends AbstractServicesTest
             ->expects($this->never())
             ->method('flush');
 
-        $zipcode = new Zipcode($this->zipcodeRepository, $this->entityManager);
+        $zipcode = new Zipcode($this->entityManager, $this->zipcodeRepository);
         $zipcode->create(new ZipcodeEntity('123456', 'city'));
     }
 
@@ -99,7 +99,7 @@ class ZipcodeTest extends AbstractServicesTest
             ->expects($this->once())
             ->method('flush');
 
-        $zipcode = new Zipcode($this->zipcodeRepository, $this->entityManager);
+        $zipcode = new Zipcode($this->entityManager, $this->zipcodeRepository);
         $zipcode->create($this->defaultZipcodeEntity);
     }
 }

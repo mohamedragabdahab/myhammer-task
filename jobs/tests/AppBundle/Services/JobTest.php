@@ -2,15 +2,13 @@
 
 namespace Tests\AppBundle\Services;
 
-use AppBundle\Entity\Job as JobEntity;
-use AppBundle\Entity\Service as ServiceEntity;
-use AppBundle\Entity\Zipcode as ZipcodeEntity;
-use AppBundle\Repository\JobRepository;
-use AppBundle\Services\Job;
-use AppBundle\Services\Service;
-use AppBundle\Services\Zipcode;
-use Doctrine\ORM\EntityManagerInterface;
-use FOS\RestBundle\Tests\Functional\WebTestCase;
+use App\Entity\Job as JobEntity;
+use App\Entity\Service as ServiceEntity;
+use App\Entity\Zipcode as ZipcodeEntity;
+use App\Repository\JobRepository;
+use App\Repository\ServiceRepository;
+use App\Repository\ZipcodeRepository;
+use App\Service\Job;
 use DateTime;
 
 /**
@@ -24,12 +22,12 @@ class JobTest extends AbstractServicesTest
     private $repository;
 
     /**
-     * @var Service
+     * @var ServiceRepository
      */
     private $service;
 
     /**
-     * @var Zipcode
+     * @var ZipcodeRepository
      */
     private $zipcode;
 
@@ -51,12 +49,12 @@ class JobTest extends AbstractServicesTest
             ->setMethods(['findAll', 'find'])
             ->getMock();
 
-        $this->service = $this->getMockBuilder(Service::class)
+        $this->service = $this->getMockBuilder(ServiceRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['find'])
             ->getMock();
 
-        $this->zipcode = $this->getMockBuilder(Zipcode::class)
+        $this->zipcode = $this->getMockBuilder(ZipcodeRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['find'])
             ->getMock();
@@ -97,12 +95,7 @@ class JobTest extends AbstractServicesTest
             ->expects($this->never())
             ->method('flush');
 
-        $job = new Job(
-            $this->repository,
-            $this->service,
-            $this->zipcode,
-            $this->entityManager
-        );
+        $job = new Job($this->entityManager, $this->repository, $this->service, $this->zipcode);
         $job->create(new JobEntity(
             802031,
             '123',
@@ -133,12 +126,7 @@ class JobTest extends AbstractServicesTest
             ->expects($this->never())
             ->method('flush');
 
-        $job = new Job(
-            $this->repository,
-            $this->service,
-            $this->zipcode,
-            $this->entityManager
-        );
+        $job = new Job($this->entityManager, $this->repository, $this->service, $this->zipcode);
         $job->create(new JobEntity(
             802031,
             '12345',
@@ -170,12 +158,7 @@ class JobTest extends AbstractServicesTest
             ->expects($this->never())
             ->method('flush');
 
-        $job = new Job(
-            $this->repository,
-            $this->service,
-            $this->zipcode,
-            $this->entityManager
-        );
+        $job = new Job($this->entityManager, $this->repository, $this->service, $this->zipcode);
         $job->create(new JobEntity(
             802031,
             '12345',
@@ -204,12 +187,7 @@ class JobTest extends AbstractServicesTest
             ->expects($this->once())
             ->method('flush');
 
-        $job = new Job(
-            $this->repository,
-            $this->service,
-            $this->zipcode,
-            $this->entityManager
-        );
+        $job = new Job($this->entityManager, $this->repository, $this->service, $this->zipcode);
         $job->create($this->defaultEntity);
     }
 
@@ -240,12 +218,7 @@ class JobTest extends AbstractServicesTest
             ->expects($this->never())
             ->method('flush');
 
-        $job = new Job(
-            $this->repository,
-            $this->service,
-            $this->zipcode,
-            $this->entityManager
-        );
+        $job = new Job($this->entityManager, $this->repository, $this->service, $this->zipcode);
         $job->update($this->persistedEntity);
     }
 
@@ -273,12 +246,7 @@ class JobTest extends AbstractServicesTest
             ->expects($this->once())
             ->method('flush');
 
-        $job = new Job(
-            $this->repository,
-            $this->service,
-            $this->zipcode,
-            $this->entityManager
-        );
+        $job = new Job($this->entityManager, $this->repository, $this->service, $this->zipcode);
         $job->update($this->persistedEntity);
     }
 }
