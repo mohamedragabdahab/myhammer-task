@@ -18,4 +18,33 @@ class JobRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Job::class);
     }
+
+    public function findAllForLastMonthByServiceAndZipcode(array $params)
+    {
+
+        $queryBuilder = $this->createQueryBuilder('job');
+
+        $startDate = (new \DateTime())->sub(new \DateInterval('P30D'));
+        $endDate = new \DateTime();
+
+        $queryBuilder = $queryBuilder->where('job.created_at BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate);
+
+
+        if (!empty($params['service'])) {
+            $queryBuilder = $queryBuilder->andWhere('job.service_id = :serviceId');
+            $queryBuilder = $queryBuilder->setParameter('searchTerm', $params['service']);
+        }
+
+        if (!empty($params['service'])) {
+            $queryBuilder = $queryBuilder->andWhere('job.zipcode_id = :zipcodeId');
+            $queryBuilder = $queryBuilder->setParameter('enabled', $params['zipcode']);
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->execute();
+
+    }
 }
